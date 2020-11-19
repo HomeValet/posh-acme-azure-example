@@ -44,3 +44,18 @@ steps:
     failOnStandardError: true
     azurePowerShellVersion: 'LatestVersion'
   condition: "and(succeeded(), ne(variables['KeyVaultResourceId'], ''))"
+
+# Copy intermediate certificates and publish as part of this build for inclusion. 
+- task: CopyFiles@2
+  inputs:
+    Contents: 'chai*.cer**'
+    TargetFolder: $(Build.ArtifactStagingDirectory)
+    CleanTargetFolder: true
+    flattenFolders: true
+
+# Publish those intermediate certificates
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'letsEncryptCAs'
+    publishLocation: 'Container'
