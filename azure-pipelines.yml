@@ -54,7 +54,7 @@ steps:
 # Copy intermediate certificates and publish as part of this build for inclusion. 
 - task: CopyFiles@2
   inputs:
-    Contents: '**/chain*.cer'
+    Contents: '**/$(CertificateNames)/**/chain*.cer'
     TargetFolder: $(Build.ArtifactStagingDirectory)
     CleanTargetFolder: true
     flattenFolders: true
