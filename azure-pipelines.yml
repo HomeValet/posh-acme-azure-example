@@ -7,6 +7,14 @@ pool:
 # The scheduled trigger will be set in the Azure DevOps portal
 trigger: none
 
+variables:
+  ${{ if eq(variables.isProd, true) }}:
+    letsEncryptUrl: 'https://acme-v02.api.letsencrypt.org/directory'
+    letsEncryptHostname: 'acme-v02.api.letsencrypt.org'
+  ${{ if not(eq(variables.isProd, true)) }}:
+    letsEncryptUrl: 'https://acme-staging-v02.api.letsencrypt.org/directory'
+    letsEncryptHostname: 'acme-staging-v02.api.letsencrypt.org'
+
 steps:
 - task: PowerShell@2
   inputs:
@@ -33,7 +41,7 @@ steps:
     azureSubscription: 'ACME Certificate Automation'
     scriptType: 'FilePath'
     scriptPath: 'New-AcmeCertificate.ps1 '
-    scriptArguments: '-AcmeDirectory "$(AcmeDirectory)" -AcmeContact "$(AcmeContact)" -CertificateNames "$(CertificateNames)" -StorageContainerSASToken "$(StorageContainerSASToken)" -CloudFlareApiToken "$(CloudFlareAPIToken)"'
+    scriptArguments: '-AcmeDirectory "$(letsEncryptUrl)" -AcmeContact "$(AcmeContact)" -CertificateNames "$(CertificateNames)" -StorageContainerSASToken "$(StorageContainerSASToken)" -CloudFlareApiToken "$(CloudFlareAPIToken)"'
     errorActionPreference: 'stop'
     failOnStandardError: true
     azurePowerShellVersion: 'LatestVersion'
@@ -54,7 +62,7 @@ steps:
 # Copy intermediate certificates and publish as part of this build for inclusion. 
 - task: CopyFiles@2
   inputs:
-    Contents: '**/$(CertificateNames)/**/chain*.cer'
+    Contents: '**/$(letsEncryptHostname)/**/$(CertificateNames)/**/chain*.cer'
     TargetFolder: $(Build.ArtifactStagingDirectory)
     CleanTargetFolder: true
     flattenFolders: true
