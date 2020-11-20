@@ -17,6 +17,7 @@ variables:
 
 steps:
 - task: PowerShell@2
+  displayName: Install Posh-ACME Cmdlet between v 3.16 and 3.18.1
   inputs:
     targetType: 'inline'
     script: |
@@ -61,11 +62,27 @@ steps:
 
 # Copy intermediate certificates and publish as part of this build for inclusion. 
 - task: CopyFiles@2
+  displayName: Copy appropriate chain*.cer files to staging dir
   inputs:
     Contents: '**/$(letsEncryptHostname)/**/$(CertificateNames)/**/chain*.cer'
     TargetFolder: $(Build.ArtifactStagingDirectory)
     CleanTargetFolder: true
     flattenFolders: true
+
+- task: ArchiveFiles@2
+  displayName: Zip em!
+  inputs:
+    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
+- task: DeleteFiles@1
+  displayName: Delete cer files in staging directory leaving the zip
+  inputs:
+    SourceFolder: '$(Build.ArtifactStagingDirectory)'
+    Contents: '*.cer'
 
 # Publish those intermediate certificates
 - task: PublishBuildArtifacts@1
