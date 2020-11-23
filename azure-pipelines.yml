@@ -8,10 +8,10 @@ pool:
 trigger: none
 
 variables:
-  ${{ if eq(variables.isProd, true) }}:
+  ${{ if eq(variables['Build.isProd'], true) }}:
     letsEncryptUrl: 'https://acme-v02.api.letsencrypt.org/directory'
     letsEncryptHostname: 'acme-v02.api.letsencrypt.org'
-  ${{ if not(eq(variables.isProd, true)) }}:
+  ${{ if not(eq(variables['Build.isProd'], true)) }}:
     letsEncryptUrl: 'https://acme-staging-v02.api.letsencrypt.org/directory'
     letsEncryptHostname: 'acme-staging-v02.api.letsencrypt.org'
 
