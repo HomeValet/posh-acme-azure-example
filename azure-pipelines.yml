@@ -22,7 +22,7 @@ steps:
     echo '##vso[task.setvariable variable=letsEncryptUrl]https://acme-v02.api.letsencrypt.org/directory'
     echo '##vso[task.setvariable variable=letsEncryptHostname]acme-staging-v02.api.letsencrypt.org'
   displayName: "do this"
-  condition: eq(variables['Build.isProd'], 'true')
+  condition: eq(variables['isProd'], 'true')
 
 - task: Bash@3
   inputs:
