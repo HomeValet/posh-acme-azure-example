@@ -30,7 +30,8 @@ steps:
     targetType: 'inline'
     script: |
       FIRST_HOST=$(echo $CertificateNames | cut -d ',' -f1)
-      echo 'The name that will be used for parsing the file path is $(FIRST_HOST)'
+      echo "The name that will be used for parsing the file path is $FIRST_HOST"
+      echo "##vso[task.setvariable variable=hostNameFilePath]$FIRST_HOST"
   
 - task: PowerShell@2
   displayName: Install Posh-ACME Cmdlet between v 3.16 and 3.18.1
@@ -80,7 +81,7 @@ steps:
 - task: CopyFiles@2
   displayName: Copy appropriate chain*.cer files to staging dir
   inputs:
-    Contents: '**/$(letsEncryptHostname)/**/$(FIRST_HOST)/**/chain*.cer'
+    Contents: '**/$(letsEncryptHostname)/**/$(hostNameFilePath)/**/chain*.cer'
     TargetFolder: $(Build.ArtifactStagingDirectory)
     CleanTargetFolder: true
     flattenFolders: true
