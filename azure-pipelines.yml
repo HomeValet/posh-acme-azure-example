@@ -8,14 +8,21 @@ pool:
 trigger: none
 
 variables:
-  ${{ if eq(variables['Build.isProd'], 'true') }}:
-    letsEncryptUrl: 'https://acme-v02.api.letsencrypt.org/directory'
-    letsEncryptHostname: 'acme-v02.api.letsencrypt.org'
-  ${{ if not(eq(variables['Build.isProd'], 'true')) }}:
+  # ${{ if eq(variables['Build.isProd'], 'true') }}:
+  #   letsEncryptUrl: 'https://acme-v02.api.letsencrypt.org/directory'
+  #   letsEncryptHostname: 'acme-v02.api.letsencrypt.org'
+  #${{ if not(eq(variables['Build.isProd'], 'true')) }}:
+  # DEFAULT TO STAGING
     letsEncryptUrl: 'https://acme-staging-v02.api.letsencrypt.org/directory'
     letsEncryptHostname: 'acme-staging-v02.api.letsencrypt.org'
 
 steps:
+
+- script: |
+    echo '##vso[task.setvariable variable=letsEncryptUrl]https://acme-v02.api.letsencrypt.org/directory'
+    echo '##vso[task.setvariable variable=letsEncryptHostname]acme-staging-v02.api.letsencrypt.org'
+  displayName: "do this"
+  condition: eq(variables['Build.isProd'], 'true')
 
 - task: Bash@3
   inputs:
