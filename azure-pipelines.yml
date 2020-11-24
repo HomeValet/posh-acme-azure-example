@@ -14,11 +14,23 @@ variables:
 
 steps:
 
-- script: |
-    echo '##vso[task.setvariable variable=letsEncryptUrl]https://acme-v02.api.letsencrypt.org/directory'
-    echo '##vso[task.setvariable variable=letsEncryptHostname]acme-staging-v02.api.letsencrypt.org'
+- task: Bash@3
   displayName: "Change LetsEncrypt URLs/file paths if isProd is true (case sensitive)"
   condition: eq(variables['isProd'], 'true')
+  inputs:
+    targetType: 'inline'
+    script: |
+      echo '##vso[task.setvariable variable=letsEncryptUrl]https://acme-v02.api.letsencrypt.org/directory'
+      echo '##vso[task.setvariable variable=letsEncryptHostname]acme-staging-v02.api.letsencrypt.org'
+
+
+- task: Bash@3
+  displayName: "Split out hostname used in filepath"
+  inputs:
+    targetType: 'inline'
+    script: |
+      FIRST_HOST=$(echo $CertificateNames | cut -d ',' -f1)
+      echo 'The name that will be used for parsing the file path is $(FIRST_HOST)'
   
 - task: PowerShell@2
   displayName: Install Posh-ACME Cmdlet between v 3.16 and 3.18.1
@@ -68,7 +80,7 @@ steps:
 - task: CopyFiles@2
   displayName: Copy appropriate chain*.cer files to staging dir
   inputs:
-    Contents: '**/$(letsEncryptHostname)/**/$(CertificateNames)/**/chain*.cer'
+    Contents: '**/$(letsEncryptHostname)/**/$(FIRST_HOST)/**/chain*.cer'
     TargetFolder: $(Build.ArtifactStagingDirectory)
     CleanTargetFolder: true
     flattenFolders: true
