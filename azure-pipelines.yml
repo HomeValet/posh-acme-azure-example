@@ -17,7 +17,7 @@ steps:
 - script: |
     echo '##vso[task.setvariable variable=letsEncryptUrl]https://acme-v02.api.letsencrypt.org/directory'
     echo '##vso[task.setvariable variable=letsEncryptHostname]acme-staging-v02.api.letsencrypt.org'
-  displayName: "Change LetsEncrypt URLs and file paths if isProd is True"
+  displayName: "Change LetsEncrypt URLs/file paths if isProd is true (case sensitive)"
   condition: eq(variables['isProd'], 'true')
   
 - task: PowerShell@2
