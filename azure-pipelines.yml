@@ -27,6 +27,18 @@ steps:
       echo letsEncryptUrl=$letsEncryptUrl
       echo letsEncryptHostname=$letsEncryptHostname
       echo isProd=$isProd
+      echo letsEncryptUrl=$LETSENCRYPTURL
+      echo letsEncryptHostname=$LETSENCRYPTHOSTNAME
+      echo isProd=$ISPROD
+      echo letsEncryptUrl=$(letsencrypturl)
+      echo letsEncryptHostname=$(letsencrypthostname)
+      echo isProd=$(isprod)
+      echo letsEncryptUrl=$(letsEncryptUrl)
+      echo letsEncryptHostname=$(letsEncryptHostname)
+      echo isProd=$(isProd)
+      echo letsEncryptUrl=$(LETSENCRYPTURL)
+      echo letsEncryptHostname=$(LETSENCRYPTHOSTNAME)
+      echo isProd=$(ISPROD)
   
 # - task: PowerShell@2
 #   displayName: Install Posh-ACME Cmdlet between v 3.16 and 3.18.1
