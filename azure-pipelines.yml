@@ -24,14 +24,16 @@ steps:
       echo letsEncryptUrl=$letsencrypturl
       echo letsEncryptHostname=$letsencrypthostname
       echo isProd=$isprod
+      echo letsEncryptUrl=$letsEncryptUrl
+      echo letsEncryptHostname=$letsEncryptHostname
+      echo isProd=$isProd
   
-- task: PowerShell@2
-  displayName: Install Posh-ACME Cmdlet between v 3.16 and 3.18.1
-  inputs:
-    targetType: 'inline'
-    script: |
-      Install-Module Posh-ACME -Force -AllowClobber -MinimumVersion '3.16.0' -MaximumVersion '3.18.1'
-
+# - task: PowerShell@2
+#   displayName: Install Posh-ACME Cmdlet between v 3.16 and 3.18.1
+#   inputs:
+#     targetType: 'inline'
+#     script: |
+#       Install-Module Posh-ACME -Force -AllowClobber -MinimumVersion '3.16.0' -MaximumVersion '3.18.1'
 
 # - task: DeleteFiles@1
 #   inputs:
