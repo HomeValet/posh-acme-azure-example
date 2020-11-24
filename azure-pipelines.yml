@@ -21,9 +21,9 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      echo 'letsEncryptUrl=$letsencrypturl'
-      echo 'letsEncryptHostname=$letsencrypthostname'
-      echo 'isProd=$isprod'
+      echo letsEncryptUrl=$letsencrypturl
+      echo letsEncryptHostname=$letsencrypthostname
+      echo isProd=$isprod
   
 - task: PowerShell@2
   displayName: Install Posh-ACME Cmdlet between v 3.16 and 3.18.1
