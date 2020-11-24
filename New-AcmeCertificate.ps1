@@ -18,14 +18,8 @@ Remove-Item $workingDirectory -Recurse -ErrorAction Ignore
 New-Item -Path $workingDirectory -ItemType Directory | Out-Null
 
 # Sync contents of storage container to working directory
-# For the script to handle both a MSFT hosted agent that defaults azcopy version 10 to azcopy and our maintained agent that defaults version 10 to azcopy, we need a non-erroring test
-#if (get-alias -Name azcopy10 -ErrorAction SilentlyContinue){
-    azcopy10 sync "$StorageContainerSASToken" "$workingDirectory"
-#}
-#else {
-#    azcopy sync "$StorageContainerSASToken" "$workingDirectory"
-#}
-
+# MSFT Hosted Ubuntu defaults to azcopy v 7 if alias azcopy10 is not specified
+azcopy10 sync "$StorageContainerSASToken" "$workingDirectory"
 
 # Set Posh-ACME working directory
 $env:POSHACME_HOME = $workingDirectory
@@ -49,10 +43,4 @@ $pArgs = @{ CFTokenInsecure = $CloudFlareAPIToken }
 New-PACertificate -Domain $CertificateNamesArr -DnsPlugin Cloudflare -PluginArgs $pArgs
 
 # Sync working directory back to storage container
-# For the script to handle both a MSFT hosted agent that defaults azcopy version 10 to azcopy and our maintained agent that defaults version 10 to azcopy, we need a non-erroring test
-#if (get-alias -Name azcopy10 -ErrorAction SilentlyContinue){
-    azcopy10 sync "$workingDirectory" "$StorageContainerSASToken"
-#}
-#else {
-#    azcopy sync "$workingDirectory" "$StorageContainerSASToken"
-#}
+azcopy10 sync "$workingDirectory" "$StorageContainerSASToken"
