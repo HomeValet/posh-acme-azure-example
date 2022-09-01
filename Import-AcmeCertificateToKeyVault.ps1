@@ -15,6 +15,7 @@ $workingDirectory = Join-Path -Path "." -ChildPath "pa"
 # Set Posh-ACME working directory
 $env:POSHACME_HOME = $workingDirectory
 Import-Module -Name Posh-ACME -Force
+Import-Module -Name Az.KeyVault -Force
 
 # Resolve the details of the certificate
 $currentServerName = ((Get-PAServer).location) -split "/" | Where-Object -FilterScript { $_ } | Select-Object -Skip 1 -First 1
