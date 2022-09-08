@@ -15,7 +15,6 @@ $workingDirectory = Join-Path -Path "." -ChildPath "pa"
 # Set Posh-ACME working directory
 $env:POSHACME_HOME = $workingDirectory
 Import-Module -Name Posh-ACME -Force
-Import-Module -Name Az.KeyVault -Force -NoClobber
 
 # Resolve the details of the certificate
 $currentServerName = ((Get-PAServer).location) -split "/" | Where-Object -FilterScript { $_ } | Select-Object -Skip 1 -First 1
@@ -37,6 +36,7 @@ if ((Test-Path -Path $orderDirectoryPath) -and (Test-Path -Path $orderDataPath) 
     # Get the current certificate from key vault (if any)
     $azureKeyVaultCertificateName = $certificateName.Replace(".", "-").Replace("!", "wildcard")
     $keyVaultResource = Get-AzResource -ResourceId $KeyVaultResourceId
+    Import-Module Az.Accounts $Error[0].Exception | fl * -force
     $azureKeyVaultCertificate = Get-AzKeyVaultCertificate -VaultName $keyVaultResource.Name -Name $azureKeyVaultCertificateName -ErrorAction SilentlyContinue
 
     # If we have a different certificate, import it
