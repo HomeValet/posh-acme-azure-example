@@ -29,7 +29,7 @@ steps:
     script: '$id = "$(Build.BuildId)"; $date = Get-Date -Format "yyyy.MMdd"; Write-Host "##vso[build.updatebuildnumber]$date.$id"'
 
 # Order or renew a certificate via ACME
-- task: AzurePowerShell@4
+- task: AzurePowerShell@5
   displayName: Order or Renew Certificate
   inputs:
     azureSubscription: 'ACME Certificate Automation'
@@ -41,7 +41,7 @@ steps:
     azurePowerShellVersion: 'LatestVersion'
 
 # Import the certificate into Azure Key Vault
-- task: AzurePowerShell@4
+- task: AzurePowerShell@5
   displayName: Import Certificate into Key Vault
   inputs:
     azureSubscription: 'ACME Certificate Automation'
